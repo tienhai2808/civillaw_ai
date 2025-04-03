@@ -3,9 +3,12 @@ from transformers import AutoTokenizer, AutoModel
 from langchain_core.embeddings import Embeddings
 from typing import List
 import numpy as np
+from decouple import config
+
+model_name = config('MODEL_NAME')
 
 class TransformersEmbeddings(Embeddings):
-  def __init__(self, model_name: str = "intfloat/multilingual-e5-large-instruct", batch_size: int = 16):
+  def __init__(self, model_name: str = model_name, batch_size: int = 16):
     self.tokenizer = AutoTokenizer.from_pretrained(model_name)
     self.model = AutoModel.from_pretrained(model_name)
     self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
